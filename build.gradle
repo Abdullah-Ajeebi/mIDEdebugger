@@ -1,0 +1,52 @@
+plugins {
+    id 'java'
+    id 'idea'
+}
+
+group = 'com.aje'
+version = '1.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+repositories {
+    mavenCentral()
+    maven { url "https://www.jitpack.io" }
+}
+
+ext {
+    // Lock our versions to the update you are running!
+    mindustryVersion = "v146"
+}
+
+// THE HOLY FIX: Forces JitPack to ignore broken Git Hashes and use "v154" for everything
+configurations.all {
+    resolutionStrategy.eachDependency { details ->
+        if (details.requested.group == 'com.github.Anuken.Arc') {
+            details.useVersion mindustryVersion
+        }
+    }
+}
+
+dependencies {
+    compileOnly "com.github.Anuken.Mindustry:core:$mindustryVersion"
+    compileOnly "com.github.Anuken.Arc:arc-core:$mindustryVersion"
+}
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+
+jar {
+    archiveBaseName = 'mlog-debugger'
+    archiveVersion = '1.0'
+}
